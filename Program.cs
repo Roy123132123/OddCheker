@@ -1,8 +1,9 @@
-﻿
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace OddCheck
 {
-    class OddCheck
+class OddCheck
     {
         static void Main(string[] args)
         {
@@ -18,28 +19,86 @@ namespace OddCheck
                 NumCheck(number);
 
             }
+            else if(userInput == "Rps")
+            {
+                Rps();
+            }
             
 
         }
-
-        static void NumCheck(int number)
+        static void Rps()
         {
-            if (number % 2 == 0)
+            DotNetEnv.Env.Load();
+            int score = 0;
+            score = DotNetEnv.Env.GetInt("score");
+            
+            
+            Console.WriteLine(score);
+            Random rnd = new Random();
+            int ai = rnd.Next(1, 3);
+            int[] options = [1, 2, 3];
+            Console.WriteLine("Enter number 1 = stone 2 = paper 3 = scissors");
+            int input = Convert.ToInt32(Console.ReadLine());
+            if (input == 1 && ai == 2||
+                input == 2 && ai == 3||
+                input == 3 && ai == 1)
             {
-                Console.WriteLine("even");
+                Console.WriteLine("You win");
+                score++;
+                Console.WriteLine($"Your current score is {score}");
+                ExitProgram(score);
+            }else if (input == ai)
+            {
+                Console.WriteLine("You have a draw");
+                Console.WriteLine($"Your current score is {score}");
+                ExitProgram(score);
+            }
+            else
+                {
+                    Console.WriteLine("You lose");
+                    Console.WriteLine($"Your current score is {score}");
+                    ExitProgram(score);
+                }
+        }
+
+        static void StoreEnv(int score)
+        {
+            if (!File.Exists("./.env"))
+            {
+                Console.WriteLine("No env file found making one");
+                File.Create("./.env").Close();
+            }
+            string Text = $"score = {score}";
+            File.WriteAllText("./.env", Text);
+        }
+        
+        static void ExitProgram(int score)
+        {
+            StoreEnv(score);
+            Console.WriteLine("Enter close to stop playing or continue to play again");
+            string Input = Console.ReadLine();
+            if (Input == "Close")
+            { 
+               
+                Process.GetCurrentProcess().Kill();
             }
             else
             {
-                Console.WriteLine("odd");
+                Rps();
             }
+        }
+         
+        static bool NumCheck(int number)
+        {
+            return number%2 == 0? true : false;
         }
         static void RandomOddCheck()
         {
             Random rnd = new Random();
             int random = rnd.Next(0, 2000);
             int[] numbers = new int[random];
-            int[] evenNumbers = new int[random];
-            int[] oddNumbers = new int[random];
+            int evenNumbers = 0;
+            int oddNumbers = 0;
             Console.WriteLine($"{random}");
             for (int i = 0; i < random; i++)
             {
@@ -49,16 +108,21 @@ namespace OddCheck
             {
                 if (numbers[i] % 2 == 0)
                 {
-                    evenNumbers[i] = i;
+                    evenNumbers++;
                     Console.WriteLine($"{i}:even");
                     
                 }
                 else
                 {
-                    oddNumbers[i] = i;
+                    oddNumbers++;
                     Console.WriteLine($"{i}:odd");
                 }
-                
+
+                if (i == numbers.Length - 1)
+                {
+                    Console.WriteLine(evenNumbers);
+                    Console.WriteLine(oddNumbers);
+                }
             }
             
         }
