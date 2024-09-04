@@ -30,8 +30,6 @@ class OddCheck
         {
             DotNetEnv.Env.Load();
             int score = DotNetEnv.Env.GetInt("score",0);
-            
-            Console.WriteLine(score);
             Random rnd = new Random();
             int ai = rnd.Next(1, 3);
             int[] options = [1, 2, 3];
@@ -73,17 +71,28 @@ class OddCheck
         static void ExitProgram(int score)
         {
             StoreEnv(score);
-            Console.WriteLine("Enter close to stop playing or continue to play again");
+            Console.WriteLine("Enter close to stop playing or press any key to continue or reset to reset your score");
             string Input = Console.ReadLine();
             if (Input == "Close")
             { 
                
                 Process.GetCurrentProcess().Kill();
             }
+            else if(Input == "Reset")
+            {
+                score = 0;
+                Reset(score);
+                Rps();
+            }
             else
             {
                 Rps();
             }
+        }
+
+        static void Reset(int score)
+        {
+            File.WriteAllText("./.env", $"score = {score}");
         }
          
         static bool NumCheck(int number)
