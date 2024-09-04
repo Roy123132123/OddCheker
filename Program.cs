@@ -71,7 +71,7 @@ class OddCheck
         static void ExitProgram(int score)
         {
             StoreEnv(score);
-            Console.WriteLine("Enter close to stop playing or press any key to continue or reset to reset your score");
+            Console.WriteLine("Enter close to stop playing or press any key to continue or Reset to reset your score");
             string Input = Console.ReadLine();
             if (Input == "Close")
             { 
