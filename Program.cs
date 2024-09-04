@@ -29,9 +29,7 @@ class OddCheck
         static void Rps()
         {
             DotNetEnv.Env.Load();
-            int score = 0;
-            score = DotNetEnv.Env.GetInt("score");
-            
+            int score = DotNetEnv.Env.GetInt("score",0);
             
             Console.WriteLine(score);
             Random rnd = new Random();
